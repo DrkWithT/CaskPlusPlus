@@ -1,0 +1,7 @@
+# ignore extra dirs
+.DS_Store
+.git
+.vscode
+
+# ignore extra files
+# ???
