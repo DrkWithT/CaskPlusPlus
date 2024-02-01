@@ -17,7 +17,6 @@ identifier ::= (ALPHA | "_")+ ; can be identifier or custom aggregate name
 primtype ::= "bool" | "int" | "float" | "string"
 aggtype ::= identifier
 arrtype ::= (primtype | aggtype) "[" "]"
-nil-literal ::= "nil"
 bool-literal ::= "true" | "false"
 integer-literal ::= ("-"){0,1} (DIGIT)+
 float-literal ::= ("-"){0,1} (DIGIT)+ "." (DIGIT)+
@@ -37,12 +36,12 @@ conditional-expr ::= equality-expr (("||" | "&&") equality-expr)+
 
 ; declaration statements
 decl ::= prim-decl | agg-decl | func-decl
-prim-decl ::= identifier ":" primtype "=" (nil_literal | bool_literal | integer-literal | float-literal | string-literal)
+prim-decl ::= "let" identifier ":" primtype "=" (nil_literal | bool_literal | integer-literal | float-literal | string-literal)
 field-decl ::= identifier ":" primtype
 agg-decl ::= "agg" identifier (field-decl)*+* "end"
 arr-decl ::= identifier ":" arrtype "=" array-literal
 func-decl ::= "func" identifier "(" (param-decl)* ")" ":" (primtype | addtype | arrtype) block
-param-decl ::= identifier ":" (primtype | aggtype | arrtype)
+param-decl ::= ("val" | "ref") identifier ":" (primtype | aggtype | arrtype)
 
 ; action statements
 import-stmt ::= "from" identifier "import" "*" | (identififer ("," identifier)*)
