@@ -19,6 +19,7 @@ BIN_DIR := ./bin
 BUILD_DIR := ./build
 MAIN_DIR := ./mains
 SRC_DIR := ./src
+INCL_DIR := ./include
 
 # auto generate source targets
 SRCS := $(shell find $(SRC_DIR) -name '*.cpp')
@@ -34,7 +35,8 @@ EXECS := $(patsubst $(BUILD_DIR)/%.o,$(BIN_DIR)/%,$(MAINS_OBJS))
 
 # search ./src and ./mains for C++ definition files
 vpath %.cpp $(MAIN_DIR)
-vpath %.{cpp,hpp} $(SRC_DIR)
+vpath %.cpp $(SRC_DIR)
+vpath %.hpp $(INCL_DIR)
 
 .PHONY: sloc tell all objs execs clean_all clean_execs
 
@@ -68,10 +70,10 @@ $(BIN_DIR)/%: $(BUILD_DIR)/%.o $(SRCS_OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -c $< -I$(SRC_DIR) -o $@
+	$(CXX) $(CXXFLAGS) -c $< -I$(INCL_DIR) -o $@
 
 $(BUILD_DIR)/%.o: $(MAIN_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -c $< -I$(SRC_DIR) -o $@
+	$(CXX) $(CXXFLAGS) -c $< -I$(INCL_DIR) -o $@
 
 # clean rules
 clean_all:
