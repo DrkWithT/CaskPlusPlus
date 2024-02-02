@@ -39,7 +39,7 @@ decl ::= prim-decl | agg-decl | func-decl
 prim-decl ::= "let" identifier ":" primtype "=" (nil_literal | bool_literal | integer-literal | float-literal | string-literal)
 field-decl ::= identifier ":" primtype
 agg-decl ::= "agg" identifier (field-decl)*+* "end"
-arr-decl ::= identifier ":" arrtype "=" array-literal
+arr-decl ::= "let" identifier ":" arrtype "=" array-literal
 func-decl ::= "func" identifier "(" (param-decl)* ")" ":" (primtype | addtype | arrtype) block
 param-decl ::= ("val" | "ref") identifier ":" (primtype | aggtype | arrtype)
 
