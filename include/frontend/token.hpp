@@ -19,15 +19,17 @@ namespace cask::frontend
         token_op_inequality,
         token_op_less,
         token_op_greater,
-        token_op_less_than,
-        token_op_greater_than,
+        token_op_less_equals,
+        token_op_greater_equals,
         token_op_multiply,
         token_op_divide,
         token_op_plus,
         token_op_minus,
+        token_boolean,
         token_integer,
         token_float,
         token_string,
+        token_comma,
         token_colon,
         token_left_brace,
         token_right_brace,
@@ -35,7 +37,8 @@ namespace cask::frontend
         token_right_brack,
         token_left_paren,
         token_right_paren,
-        token_eof
+        token_eof,
+        token_unknown
     };
 
     struct Token
