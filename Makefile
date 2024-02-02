@@ -40,9 +40,9 @@ vpath %.hpp $(INCL_DIR)
 
 .PHONY: sloc tell all objs execs clean_all clean_execs
 
-# utility rule: show SLOC
+# utility rule: show SLOC by recusrive search of C++ code files 
 sloc:
-	@wc -l $(MAIN_DIR)/*.cpp $(SRC_DIR)/**/*.hpp $(SRC_DIR)/*.cpp
+	@wc -l $(MAIN_DIR)/*.cpp $(INCL_DIR)/**/*.hpp $(SRC_DIR)/*.cpp
 
 # debug rule: show all targets and deps
 tell:
