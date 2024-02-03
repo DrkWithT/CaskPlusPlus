@@ -31,9 +31,9 @@ char* readFile(const std::string& file_path, size_t* read_count)
 
     char* contents = new char[file_size + 1];
 
-    bool read_ok = reader.read(contents, file_size).bad();
+    bool read_fail = reader.read(contents, file_size).bad();
 
-    if (!read_ok)
+    if (read_fail)
     {
         delete[] contents;
         contents = nullptr;
