@@ -1,0 +1,35 @@
+#
+    pown.cask
+    Divide and conquer algo for a^n.
+#
+
+from io import puts, puti
+
+func dq_pow(val base : int , val pow : int) : int
+    if (pow == 0)
+        return 1
+    end
+
+    if (pow == 1)
+        return base
+    end
+
+    let even_p : int = pow / 2
+    let odd_p : int = (pow - 1) / 2
+
+    if (is_even(pow))
+        return dq_pow(base, even_p) * dq_pow(base, even_p)
+    else
+        return base * dq_pow(base, odd_p) * dq_pow(base, odd_p)
+    end
+end
+
+func main() : int
+    let base = 2
+    let power = 5
+
+    puts("Power of 2 to 5: ")
+    puti(dq_pow(base, power))
+
+    return 0
+end

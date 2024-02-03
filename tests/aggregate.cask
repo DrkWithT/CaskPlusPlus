@@ -1,0 +1,19 @@
+#
+    aggregate.cask
+    Test simple aggregate type.
+#
+
+from io import putfmt
+
+agg Point
+    x : int
+    y : int
+end
+
+func main() : int
+    let origin : Point = {0, 0}
+
+    putfmt("The xy origin is: $i , $i\n", origin["x"], origin["y"])
+
+    return 0
+end
