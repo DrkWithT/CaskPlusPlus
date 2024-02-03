@@ -2,6 +2,8 @@
 .DS_Store
 .git
 .vscode
+bin/
+build/
 
 # ignore extra files
 # ???
