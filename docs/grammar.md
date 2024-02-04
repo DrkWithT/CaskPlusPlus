@@ -4,7 +4,7 @@
  - Comments are multi-line by default.
     - Delimited by `'#'`.
  - `agg` means a data structure wrapping one or more typed attributes. This will be like a C `struct`.
- - Math operators: `+, -, *, /`
+ - Math operators: `+, -, *, /, %`
  - Equality, comparison operators: `==, !=, >, >=, <, <=`
  - Logical operators : `||, &&`
 
@@ -25,7 +25,7 @@ agg-literal ::= "{" literal ("," literal)* "}"
 array-literal ::= "[" (basic ",")* "]"
 
 ; expressions
-basic ::= nil-literal | bool-literal | integer-literal | float-literal | string-literal | array-literal | agg-literal | identifier | call-expr | "(" equality-expr ")"
+basic ::= bool-literal | integer-literal | float-literal | string-literal | array-literal | agg-literal | identifier | call-expr | "(" conditional-expr ")"
 call-expr ::= identifier "(" (basic){0, 1} ("," basic)* ")"
 access-expr ::= basic "[" integer-literal | string-literal | identifier "]"
 term-expr ::= access-expr (("+" | "-") access-expr)*
@@ -37,7 +37,7 @@ conditional-expr ::= equality-expr (("||" | "&&") equality-expr)*
 
 ; declaration statements
 decl ::= prim-decl | agg-decl | func-decl
-prim-decl ::= "let" identifier ":" primtype "=" (nil_literal | bool_literal | integer-literal | float-literal | string-literal)
+prim-decl ::= "let" identifier ":" primtype "=" ( bool_literal | integer-literal | float-literal | string-literal)
 field-decl ::= identifier ":" primtype
 agg-decl ::= "agg" identifier (field-decl)*+* "end"
 arr-decl ::= "let" identifier ":" arrtype "=" array-literal
