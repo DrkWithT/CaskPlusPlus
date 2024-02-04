@@ -21,6 +21,7 @@ namespace cask::frontend
         token_op_greater,
         token_op_less_equals,
         token_op_greater_equals,
+        token_op_modulo,
         token_op_multiply,
         token_op_divide,
         token_op_plus,

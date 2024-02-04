@@ -28,11 +28,12 @@ array-literal ::= "[" (basic ",")* "]"
 basic ::= nil-literal | bool-literal | integer-literal | float-literal | string-literal | array-literal | agg-literal | identifier | call-expr | "(" equality-expr ")"
 call-expr ::= identifier "(" (basic){0, 1} ("," basic)* ")"
 access-expr ::= basic "[" integer-literal | string-literal | identifier "]"
-term-expr ::= access-expr (("+" | "-") access-expr)+
-factor-expr ::= term-expr ("*" | "/" term-expr)
-comparison-expr ::= factor-expr (("<" | "<=" | ">" | ">=") factor-expr)+
-equality-expr ::= comparison-expr (("==" | "!=") comparison-expr)+
-conditional-expr ::= equality-expr (("||" | "&&") equality-expr)+
+term-expr ::= access-expr (("+" | "-") access-expr)*
+factor-expr ::= term-expr ("*" | "/" term-expr)*
+modulo-expr ::= factor-expr ("%" factor-expr)*
+comparison-expr ::= factor-expr (("<" | "<=" | ">" | ">=") factor-expr)*
+equality-expr ::= comparison-expr (("==" | "!=") comparison-expr)*
+conditional-expr ::= equality-expr (("||" | "&&") equality-expr)*
 
 ; declaration statements
 decl ::= prim-decl | agg-decl | func-decl
