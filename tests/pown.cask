@@ -17,7 +17,7 @@ func dq_pow(val base : int , val pow : int) : int
     let even_p : int = pow / 2
     let odd_p : int = (pow - 1) / 2
 
-    if (is_even(pow))
+    if (pow % 2 == 0)
         return dq_pow(base, even_p) * dq_pow(base, even_p)
     else
         return base * dq_pow(base, odd_p) * dq_pow(base, odd_p)
