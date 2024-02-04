@@ -21,13 +21,13 @@ constexpr char cask_cr = '\r';
 constexpr char cask_lf = '\n';
 
 /// Number of keywords
-constexpr size_t cask_word_count = 17;
+constexpr size_t cask_word_count = 18;
 
 /// Number of operators
-constexpr size_t cask_op_count = 13;
+constexpr size_t cask_op_count = 14;
 
 /// Keywords to check
-constexpr char* cask_words[] {
+const char* cask_words[] {
     "from",
     "import",
     "agg",
@@ -38,6 +38,7 @@ constexpr char* cask_words[] {
     "while",
     "if",
     "else",
+    "return",
     "end",
     "bool", // Begin primitive typenames
     "int",
@@ -47,7 +48,8 @@ constexpr char* cask_words[] {
     "false"
 };
 
-constexpr TokenType cask_word_lexical_type[] {
+const TokenType cask_word_lexical_type[] {
+    token_keyword,
     token_keyword,
     token_keyword,
     token_keyword,
@@ -67,7 +69,7 @@ constexpr TokenType cask_word_lexical_type[] {
     token_boolean
 };
 
-constexpr const char* cask_operator_literals[] {
+const char* cask_operator_literals[] {
     "=",
     "||",
     "&&",
@@ -77,13 +79,14 @@ constexpr const char* cask_operator_literals[] {
     ">",
     "<=",
     ">=",
+    "%",
     "*",
     "/",
     "+",
     "-"
 };
 
-constexpr TokenType cask_operator_lexical_types[] {
+const TokenType cask_operator_lexical_types[] {
     token_op_assignment,
     token_op_or,
     token_op_and,
@@ -106,11 +109,11 @@ constexpr bool charIsAlpha(char c) {
 }
 
 constexpr bool charIsNumeric(char c) {
-    return (c >= '0' && c <= '9') || c == '.';
+    return (c >= '0' && c <= '9') || (c == '.');
 }
 
 constexpr bool charIsOpSymbol(char c) {
-    return c != '!' && c != '=' && c != '*' && c != '/' && c != '+' && c != '-' && c != '|' && c != '&';
+    return c == '!' || c == '=' || c == '*' || c == '/' || c == '+' || c == '-' || c== '%' || c == '|' || c == '&';
 }
 
 constexpr bool charIsSpace(char c) {
@@ -127,13 +130,13 @@ Lexer::Lexer(const char* source_cstr, size_t source_cstr_length)
         switch (cask_word_lexical_type[word_i])
         {
         case token_keyword:
-            keywords.insert({cask_words[word_i]});
+            keywords.emplace(cask_words[word_i]);
             break;
         case token_typename:
-            typenames.insert({cask_words[word_i]});
+            typenames.emplace(cask_words[word_i]);
             break;
         case token_boolean:
-            specials.insert(cask_words[word_i]);
+            specials.emplace(cask_words[word_i]);
             break;
         default:
             break;
@@ -202,6 +205,7 @@ Token Lexer::lexWord()
     char temp = '\0';
 
     sout.clear();
+    sout.str("");
 
     while (source_index < source_length)
     {
@@ -215,16 +219,14 @@ Token Lexer::lexWord()
         word_len++;
     }
 
-    std::string lexeme_str {sout.str()};
-
-    if (keywords.find(lexeme_str) != keywords.end())
-        return (Token) {.begin = word_begin, .length = word_len, .type = token_keyword};
-
-    if (typenames.find(lexeme_str) != typenames.end())
-        return (Token) {.begin = word_begin, .length = word_len, .type = token_typename};
+    std::string lexeme_str = sout.str();
 
     /// @note The only special literals are true, false booleans- Thus a special is always a boolean.
-    if (specials.find(lexeme_str) != specials.end())
+    if (keywords.find(lexeme_str) != keywords.end())
+        return (Token) {.begin = word_begin, .length = word_len, .type = token_keyword};
+    else if (typenames.find(lexeme_str) != typenames.end())
+        return (Token) {.begin = word_begin, .length = word_len, .type = token_typename};
+    else if (specials.find(lexeme_str) != specials.end())
         return (Token) {.begin = word_begin, .length = word_len, .type = token_boolean};
 
     return (Token) {.begin = word_begin, .length = word_len, .type = token_identifier};
@@ -238,13 +240,14 @@ Token Lexer::lexOperator()
     char temp = '\0';
 
     sout.clear();
+    sout.str("");
 
     while (source_index < source_length)
     {
         temp = source_view[source_index];
 
         /// @note I will stop consuming letters for this possible operator if the letters aren't valid operator symbols... Follow the assumption that a token contains similar characters for its kind.
-        if (temp != '!' && temp != '=' && temp != '*' && temp != '/' && temp != '+' && temp != '-' && temp != '|' && temp != '&')
+        if (!charIsOpSymbol(temp))
             break;
 
         sout << temp;
@@ -258,11 +261,7 @@ Token Lexer::lexOperator()
     if (operators.find(oper_lexeme) == operators.end())
         return (Token) {.begin = oper_begin, .length = oper_length, .type = token_unknown};
     
-    return (Token) {
-        .begin = oper_begin,
-        .length = oper_length,
-        .type = operators.at(oper_lexeme)
-    };
+    return (Token) {.begin = oper_begin, .length = oper_length, .type = operators.at(oper_lexeme)};
 }
 
 Token Lexer::lexNumeric()
@@ -286,15 +285,12 @@ Token Lexer::lexNumeric()
         source_index++;
     }
 
-    switch (dot_count)
-    {
-    case 0:
+    if (dot_count == 0)
         return (Token) {.begin = numeric_begin, .length = numeric_length, .type = token_integer};
-    case 1:
+    else if (dot_count == 1)
         return (Token) {.begin = numeric_begin, .length = numeric_length, .type = token_float};
-    default:
+    else
         return (Token) {.begin = numeric_begin, .length = numeric_length, .type = token_unknown};
-    }
 }
 
 Token Lexer::lexString()
@@ -316,7 +312,7 @@ Token Lexer::lexString()
             break;
         }
 
-        source_length++;
+        strbody_length++;
         source_index++;
     }
 
@@ -327,16 +323,19 @@ Token Lexer::lexNext()
 {
     if (source_index >= source_length)
         return (Token) {.begin = source_length, .length = 1, .type = token_eof};
-    
+
     char peek_symbol = source_view[source_index];
 
     if (charIsSpace(peek_symbol))
+    {
         skipWhitespace();
-
-    peek_symbol = source_view[source_index];
+        peek_symbol = source_view[source_index];
+    }
 
     switch (peek_symbol)
     {
+    case '#':
+        return lexComment();
     case '{':
         return lexSingular(token_left_brace);
     case '}':
@@ -349,16 +348,27 @@ Token Lexer::lexNext()
         return lexSingular(token_left_paren);
     case ')':
         return lexSingular(token_right_paren);
+    case ',':
+        return lexSingular(token_comma);
+    case ':':
+        return lexSingular(token_colon);
+    case '\"':
+        return lexString();
     default:
-        break;
+        if (charIsAlpha(peek_symbol))
+            return lexWord();
+        else if (charIsOpSymbol(peek_symbol))
+            return lexOperator();
+        else if (charIsNumeric(peek_symbol))
+            return lexNumeric();
+        else
+        {
+            source_index += 1;
+            return (Token){
+                .begin = source_index - 1,
+                .length = 1,
+                .type = (source_index >= source_length) ? token_eof : token_unknown
+            };
+        }
     }
-    
-    if (peek_symbol == '#')
-        return lexComment();
-    else if (charIsAlpha(peek_symbol))
-        return lexWord();
-    else if (charIsOpSymbol(peek_symbol))
-        return lexOperator();
-
-    return (Token) {.begin = source_index++, .length = 1, .type = token_unknown};
 }
