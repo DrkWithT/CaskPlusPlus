@@ -13,12 +13,11 @@
 #include "utils/files.hpp"
 #include "frontend/lexer.hpp"
 
-constexpr char* cask_flag_version = "--version";
-constexpr char* cask_flag_info = "--info";
-constexpr char* cask_flag_warn = "--warnings";
-constexpr char* cask_version_cstr = "caskc v0.1.0\nBy: DrkWithT@GitHub";
-constexpr char* cask_info_cstr = "caskc options:\n--version\t print version and exit.\n--info\tprint flag info and exit.\n--warnings\tenables compilation warnings.";
-using CASK_TOKENTYPE = cask::frontend::TokenType;
+const char* cask_flag_version = "--version";
+const char* cask_flag_info = "--info";
+const char* cask_flag_warn = "--warnings";
+const char* cask_version_cstr = "caskc v0.1.0\nBy: DrkWithT@GitHub";
+const char* cask_info_cstr = "caskc options:\n--version\t print version and exit.\n--info\tprint flag info and exit.\n--warnings\tenables compilation warnings.";
 
 int main (int argc, const char* argv[])
 {
@@ -48,9 +47,17 @@ int main (int argc, const char* argv[])
     }
     else
     {
-        std::cout << cask_info_cstr << '\n';
+        std::cerr << cask_info_cstr << '\n';
         return 1;
     }
+
+    if (!argv[2])
+    {
+        std::cerr << "No file path found!\n";
+        return 1;
+    }
+
+    arg_str = argv[2];
 
     size_t content_length = 0;
     char* file_contents = readFile(arg_str, &content_length);
@@ -69,7 +76,12 @@ int main (int argc, const char* argv[])
         token = tokenizer.lexNext();
 
         std::cout << "{.begin = " << token.begin << ", .length = " << token.length << ", .type = " << token.type << "}\n";
-    } while (token.type != CASK_TOKENTYPE::token_eof);
+    } while (token.type != cask::frontend::TokenType::token_eof);
+
+    if (enable_warnings)
+    {
+        std::cout << "TODO: add enable_warnings for parsing.\n";
+    }
 
     delete[] file_contents;
     return 0;
