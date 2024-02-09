@@ -27,7 +27,7 @@ array-literal ::= "[" (basic ",")* "]"
 ; expressions
 basic ::= bool-literal | integer-literal | float-literal | string-literal | array-literal | agg-literal | identifier | call-expr | "(" conditional-expr ")"
 call-expr ::= identifier "(" (basic){0, 1} ("," basic)* ")"
-access-expr ::= basic "[" integer-literal | string-literal | identifier "]"
+access-expr ::= basic ("[" integer-literal | string-literal | identifier "]")*
 term-expr ::= access-expr (("+" | "-") access-expr)*
 factor-expr ::= term-expr ("*" | "/" term-expr)*
 modulo-expr ::= factor-expr ("%" factor-expr)*
