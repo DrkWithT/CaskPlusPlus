@@ -3,6 +3,7 @@
 
 #include <any>
 #include <string>
+#include <vector>
 #include "syntax/ast/cask_ast_expr.hpp"
 
 namespace cask::syntax
@@ -10,13 +11,13 @@ namespace cask::syntax
     class CallExpr : public IAstExpr
     {
     private:
-        std::vector<std::any> args;
-        std::string name;
+        std::vector<std::any> callee_args;
+        std::string callee_name;
     public:
-        CallExpr(std::string name);
+        CallExpr(const std::string& name);
 
-        const std::string& getName() const;
         const std::vector<std::any>& getArgs() const;
+        const std::string& getName() const;
 
         void appendArg(std::any arg);
 

@@ -8,12 +8,7 @@ namespace cask::syntax
     class BasicExpr;
     class AccessExpr;
     class CallExpr;
-    class TermExpr;
-    class FactorExpr;
-    class ModuloExpr;
-    class ComparisonExpr;
-    class EqualityExpr;
-    class ConditionalExpr;
+    class BinaryExpr;
 
     /**
      * @brief Generic Visitor pattern interface for anything to check an AST node. This is used in concrete visitors that walk the AST to validate it or generate code!
@@ -25,12 +20,7 @@ namespace cask::syntax
         virtual void visitBasicExpr(const BasicExpr& expr) = 0;
         virtual void visitAccessExpr(const AccessExpr& expr) = 0;
         virtual void visitCallExpr(const CallExpr& expr) = 0;
-        virtual void visitTermExpr(const TermExpr& expr) = 0;
-        virtual void visitFactorExpr(const FactorExpr& expr) = 0;
-        virtual void visitModuloExpr(const ModuloExpr& expr) = 0;
-        virtual void visitComparisonExpr(const ComparisonExpr& expr) = 0;
-        virtual void visitEqualityExpr(const EqualityExpr& expr) = 0;
-        virtual void visitConditionalExpr(const ConditionalExpr& expr) = 0;
+        virtual void visitBinaryExpr(const BinaryExpr& expr) = 0;
     };
 }
 
