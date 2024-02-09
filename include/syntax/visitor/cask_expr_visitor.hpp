@@ -5,7 +5,7 @@ namespace cask::syntax
 {
     /* Forward declare visitable classes... */
     /// @note: use std::any for any primitive literal value, etc.
-    class LiteralExpr;
+    class BasicExpr;
     class AccessExpr;
     class CallExpr;
     class TermExpr;
@@ -22,7 +22,7 @@ namespace cask::syntax
     {
     public:
         virtual ~IExprVisitor() {}
-        virtual void visitLiteralExpr(const LiteralExpr& expr) = 0;
+        virtual void visitBasicExpr(const BasicExpr& expr) = 0;
         virtual void visitAccessExpr(const AccessExpr& expr) = 0;
         virtual void visitCallExpr(const CallExpr& expr) = 0;
         virtual void visitTermExpr(const TermExpr& expr) = 0;
