@@ -36,12 +36,12 @@ equality-expr ::= comparison-expr (("==" | "!=") comparison-expr)*
 conditional-expr ::= equality-expr (("||" | "&&") equality-expr)*
 
 ; declaration statements
-decl ::= prim-decl | agg-decl | func-decl
-prim-decl ::= "let" identifier ":" primtype "=" ( bool_literal | integer-literal | float-literal | string-literal)
-field-decl ::= identifier ":" primtype
+decl ::= var-decl | agg-decl | func-decl
+var-decl ::= "let" identifier ":" (primtype | aggtype | arrtype) "=" basic
+field-decl ::= identifier ":" (primtype | aggtype | arrtype)
 agg-decl ::= "agg" identifier (field-decl)*+* "end"
 arr-decl ::= "let" identifier ":" arrtype "=" array-literal
-func-decl ::= "func" identifier "(" (param-decl)* ")" ":" (primtype | addtype | arrtype) block
+func-decl ::= "func" identifier "(" (param-decl)* ")" ":" (primtype | aggtype | arrtype) block
 param-decl ::= ("val" | "ref") identifier ":" (primtype | aggtype | arrtype)
 
 ; action statements
