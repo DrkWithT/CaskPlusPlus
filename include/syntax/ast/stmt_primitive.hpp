@@ -2,28 +2,21 @@
 #define STMT_PRIMITIVE
 
 #include <any>
+#include "syntax/ast/cask_ast_enums.hpp"
 #include "syntax/ast/cask_ast_stmt.hpp"
 
 namespace cask::syntax
 {
-    enum PrimitiveType
-    {
-        primitive_bool,
-        primitive_int,
-        primitive_float,
-        primitive_string
-    };
-
-    class StmtPrimitive : public IAstStmt
+    class VarDeclStmt : public IAstStmt
     {
     private:
         std::any value;
-        PrimitiveType type;
+        CaskDataType type;
     public:
-        StmtPrimitive(PrimitiveType pmt_type, std::any pmt_value);
+        VarDeclStmt(CaskDataType data_type, std::any data_value);
 
         const std::any& getValue() const;
-        PrimitiveType getType() const;
+        CaskDataType getType() const;
 
         void acceptVisitor(IStmtVisitor& visitor) const override;
     };
