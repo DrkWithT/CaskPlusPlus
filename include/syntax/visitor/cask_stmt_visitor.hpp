@@ -3,7 +3,7 @@
 
 namespace cask::syntax
 {
-    class PrimitiveDeclStmt;
+    class VarDeclStmt;
     class AggFieldDeclStmt;
     class AggDeclStmt;
     class ArrDeclStmt;
@@ -21,7 +21,7 @@ namespace cask::syntax
     public:
         ~IStmtVisitor() = default;
 
-        virtual void visitPrimitiveDecl(const PrimitiveDeclStmt& stmt) = 0;
+        virtual void visitVarDeclStmt(const VarDeclStmt& stmt) = 0;
         virtual void visitAggFieldDecl(const AggFieldDeclStmt& stmt) = 0;
         virtual void visitAggDecl(const AggDeclStmt& stmt) = 0;
         virtual void visitArrDecl(const ArrDeclStmt& stmt) = 0;
